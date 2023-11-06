@@ -12,3 +12,4 @@ You need the Wear OS Small Round API 30 emulator installed as your device. Make 
 More Resources about Wear OS in Android Studio:
 [Create and run an app on Wear OS](https://developer.android.com/training/wearables/get-started/creating)
 [Get started with Wear OS](https://developer.android.com/training/wearables)
+[Health Services on Wear OS](https://developer.android.com/health-and-fitness/guides/health-services)
