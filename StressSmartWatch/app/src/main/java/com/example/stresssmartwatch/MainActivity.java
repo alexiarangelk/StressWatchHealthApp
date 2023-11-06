@@ -14,6 +14,7 @@ import com.example.stresssmartwatch.databinding.ActivityMainBinding;
 
 public class MainActivity extends Activity {
 
+    private static final String TAG = "MainActivity";
     private TextView mTextView;
     private ActivityMainBinding binding;
     private SensorManager mSensorManager;
@@ -22,14 +23,22 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        mTextView = binding.text;
+        mTextView = (TextView)findViewById(R.id.healthText);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mHeartSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+
+        Log.i(TAG, " Program Start!");
+        mTextView.setText("Program Start");
+        startMeasure();
+
+    }
+
+    private void startMeasure() {
+        boolean sensorRegistered = mSensorManager.registerListener(mSensorEventListener, mHeartSensor, mSensorManager.SENSOR_DELAY_FASTEST);
+        Log.d("Sensor Status:", " Sensor registered: " + (sensorRegistered ? "yes" : "no"));
     }
 
     @Override
@@ -51,8 +60,16 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            final SensorEvent event1=event;
-            mTextView.setText(Float.toString(event1.values[0]));
+
+            if (event.sensor.getType() == Sensor.TYPE_HEART_RATE){
+                //if we have a change in the heart rate, display it
+                mTextView = (TextView)findViewById(R.id.healthText);
+
+                float mHeartRateFloat = event.values[0];
+                int mHeartRate = Math.round(mHeartRateFloat);
+                mTextView.setText(Integer.toString(mHeartRate));
+            }
+
         }
 
 

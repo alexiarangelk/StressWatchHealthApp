@@ -17,7 +17,7 @@
         app:layout_boxedEdges="all">
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/healthText"
             android:layout_width="138dp"
             android:layout_height="62dp"
             android:text="@string/hello_world" />
