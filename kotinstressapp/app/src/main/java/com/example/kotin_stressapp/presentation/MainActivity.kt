@@ -1,5 +1,6 @@
 package com.example.kotin_stressapp.presentation
 
+import android.graphics.Color
 import android.util.Log
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -67,52 +68,56 @@ Paused = 2
             ) {
                 Greeting(greetingName = greetingName)
 
-                if (appState.value == AppState.STOPPED){ //while app is not running
-                    Button(
-                        onClick = { //running the app
-                            Log.d("Button - Start", "button clicked")
-                            appState.value = AppState.RUNNING
-                            appRunning(appState)
-                        }
-                    ) {
-                        Text("Start")
-                    }
-                }
-                else{ //while app is running OR paused
-                    Log.d("Button - Stop/Pause", "button should have changed")
-                    Button(
-                        onClick = { //stopping the app
-                            appState.value = AppState.STOPPED
-                            appStopping(appState)
-
-                        }
-                    ) {
-                        Text("Stop")
-                    }
-
-                    //Resume + Pause buttons
-                    Button(
-                        onClick = {
-                            if (appState.value == AppState.PAUSE){ //app is paused
-                                //unpause it
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Row content
+                    if (appState.value == AppState.STOPPED) { //while app is not running
+                        Button(
+                            onClick = { //running the app
+                                Log.d("Button - Start", "button clicked")
                                 appState.value = AppState.RUNNING
+                                appRunning(appState)
                             }
-                            else{ //app is running
-                                //pause it
-                                appState.value = AppState.PAUSE
-                                appPausing(appState)
+                        ) {
+                            Text("Start")
+                        }
+                    } else { //while app is running OR paused
+                        Log.d("Button - Stop/Pause", "button should have changed")
+                        Button(
+                            onClick = { //stopping the app
+                                appState.value = AppState.STOPPED
+                                appStopping(appState)
+
                             }
-                        }
-                    ) {
-                        if (appState.value == AppState.PAUSE){ //app is paused
-                            //prepare for resume
-                            Text("Resume")
-                        }
-                        else{ //app is running
-                            //prepare for pause
-                            Text("Pause")
+                        ) {
+                            Text("Stop")
                         }
 
+                        //Resume + Pause buttons
+                        Button(
+                            onClick = {
+                                if (appState.value == AppState.PAUSE) { //app is paused
+                                    //unpause it
+                                    appState.value = AppState.RUNNING
+                                } else { //app is running
+                                    //pause it
+                                    appState.value = AppState.PAUSE
+                                    appPausing(appState)
+                                }
+                            }
+                        ) {
+                            if (appState.value == AppState.PAUSE) { //app is paused
+                                //prepare for resume
+                                Text("Resume")
+                            } else { //app is running
+                                //prepare for pause
+                                Text("Pause")
+                            }
+
+                        }
                     }
                 }
             }
