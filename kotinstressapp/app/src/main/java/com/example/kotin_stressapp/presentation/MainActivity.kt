@@ -24,15 +24,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+
 class MainActivity : ComponentActivity() {
 
+    private lateinit var sensorManager : SensorManager
+    private var heartRateSensor : Sensor ?= null
+    private var heartRateValue : Float = 0.0f
+    private val sensorListener = SensorListener()
+
+    // ***-----------------[ Main Functions
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+
         super.onCreate(savedInstanceState)
         setContent {
             WearApp("Android")
         }
     }
-
 
     @Composable
     fun WearApp(
@@ -127,12 +143,13 @@ class MainActivity : ComponentActivity() {
                     }
 
                     if (appState.value == AppState.RUNNING){
+                        Log.d("appState.value == AppState.RUNNING", "Should be displaying the value")
                         Text(
                             modifier = Modifier.width(140.dp),
                             textAlign = TextAlign.Left,
                             color = MaterialTheme.colors.secondary,
                             fontSize = 14.sp,
-                            text = "Heart Rate: [] bpm"
+                            text = "Heart Rate:$heartRateValue bpm"
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
@@ -157,7 +174,7 @@ class MainActivity : ComponentActivity() {
                             textAlign = TextAlign.Left,
                             color = MaterialTheme.colors.secondary,
                             fontSize = 14.sp,
-                            text = "Heart Rate: [] bpm"
+                            text = "Heart Rate:$heartRateValue bpm"
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
@@ -182,10 +199,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    // ***-----------------[ State Functions
+
     fun appRunning(state: MutableState<AppState>) {
         //start button was pressed, what will you do?
         while (state.value == AppState.RUNNING) {
-            break
+            if (heartRateSensor != null){
+                onResume()
+                heartRateValue = sensorListener.getHeartRateValue()
+            }
         }
     }
 
@@ -208,6 +230,38 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    // ***-----------------[ Sensor Functions
+
+
+    //TODO: IMPLEMENT PERMISSION!
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        if (requestCode == BODY_SENSORS_PERMISSION_CODE) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permission granted; proceed with sensor usage
+//                // ...
+//            } else {
+//                // Permission denied; handle accordingly
+//                // ...
+//            }
+//        }
+//    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(sensorListener, heartRateSensor, SensorManager.SENSOR_STATUS_ACCURACY_LOW)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(sensorListener, heartRateSensor)
+    }
+
+    // ***-----------------[ Misc
+
     @Composable
     fun Greeting(greetingName: String, accompanyingName: String) {
         Text(
@@ -227,3 +281,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// Separate class implementing SensorEventListener
+class SensorListener : SensorEventListener {
+    private var heartRateValue : Float = 0.0f
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Handle accuracy changes if needed
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event != null) {
+            if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
+                heartRateValue = event.values[0]
+            }
+        }
+    }
+
+    fun getHeartRateValue(): Float{
+        return heartRateValue
+    }
+}
