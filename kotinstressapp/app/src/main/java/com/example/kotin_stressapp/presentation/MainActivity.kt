@@ -59,6 +59,8 @@ class MainActivity : ComponentActivity() {
             ) {
                 item {
 
+                    Spacer(modifier = Modifier.height(25.dp))
+
                     if (appState.value == AppState.STOPPED){
                         Greeting(greetingName = "Welcome to StressNav!", accompanyingName = "Press Start to Begin Recording Data")
                     }
@@ -123,6 +125,58 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
+
+                    if (appState.value == AppState.RUNNING){
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Heart Rate: [] bpm"
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Heart Rate Variability: [] per minute"
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Breathing Rate: [] per minute"
+                        )
+                    }
+                    else if (appState.value == AppState.PAUSE){
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Heart Rate: [] bpm"
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Heart Rate Variability: [] per minute"
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            modifier = Modifier.width(140.dp),
+                            textAlign = TextAlign.Left,
+                            color = MaterialTheme.colors.secondary,
+                            fontSize = 14.sp,
+                            text = "Breathing Rate: [] per minute"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(25.dp))
                 }
             }
         }
@@ -159,6 +213,7 @@ class MainActivity : ComponentActivity() {
         Text(
             modifier = Modifier.width(100.dp),
             textAlign = TextAlign.Center,
+            fontSize = 18.sp,
             color = MaterialTheme.colors.primary,
             text = greetingName
         )
@@ -166,7 +221,7 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier.width(140.dp),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colors.secondary,
-            fontSize = 11.sp,
+            fontSize = 14.sp,
             text = accompanyingName
         )
     }
