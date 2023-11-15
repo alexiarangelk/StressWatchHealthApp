@@ -31,20 +31,16 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.vmadalin.easypermissions.EasyPermissions
 
-class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
+class MainActivity : ComponentActivity() , SensorEventListener {
 
     private lateinit var sensorManager : SensorManager
     private var heartRateSensor : Sensor ?= null
     private var heartRateValue : Float = 0.0f
-    private val sensorListener = SensorListener()
+//    private val sensorListener = SensorListener()
     private val BODY_SENSORS_PERMISSION_CODE = 123
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
 
     // ***-----------------[ Main Functions
@@ -54,51 +50,27 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
 
-//        if (ContextCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.BODY_SENSORS
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // Request the permission
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.BODY_SENSORS),
-//                BODY_SENSORS_PERMISSION_CODE
-//            )
-//        } else {
-//            Log.d("Requesting Permission", "Permission already granted")
-//        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BODY_SENSORS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request the permission
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.BODY_SENSORS),
+                BODY_SENSORS_PERMISSION_CODE
+            )
+        } else {
+            Log.d("Requesting Permission", "Permission already granted")
+        }
 
-//        if (ContextCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.BODY_SENSORS
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // Request the permission
-//            requestPermissionLauncher = registerForActivityResult(
-//                ActivityResultContracts.RequestPermission()
-//            ) { isGranted ->
-//                if (isGranted) {
-//                    // PERMISSION GRANTED
-//                    Log.d("Requesting Permission", "Permission granted")
-//                } else {
-//                    // PERMISSION NOT GRANTED
-//                    Log.d("Requesting Permission", "Permission denied")
-//                }
-//            }
-//        } else {
-//            Log.d("Requesting Permission", "Permission already granted")
-//        }
+
 
         super.onCreate(savedInstanceState)
         setContent {
             WearApp("Android")
         }
-    }
-
-
-    fun bodyPermissionRequest() {
-        requestPermissionLauncher.launch(Manifest.permission.BODY_SENSORS)
     }
 
     @Composable
@@ -200,8 +172,9 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
                             textAlign = TextAlign.Left,
                             color = MaterialTheme.colors.secondary,
                             fontSize = 14.sp,
-                            text = "Heart Rate:$heartRateValue bpm"
+                            text = "Heart Rate: $heartRateValue bpm"
                         )
+
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             modifier = Modifier.width(140.dp),
@@ -225,7 +198,7 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
                             textAlign = TextAlign.Left,
                             color = MaterialTheme.colors.secondary,
                             fontSize = 14.sp,
-                            text = "Heart Rate:$heartRateValue bpm"
+                            text = "Heart Rate: $heartRateValue bpm"
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
@@ -254,12 +227,18 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
 
     fun appRunning(state: MutableState<AppState>) {
         //start button was pressed, what will you do?
-        while (state.value == AppState.RUNNING) {
-            if (heartRateSensor != null){
-                onResume()
-                heartRateValue = sensorListener.getHeartRateValue()
-            }
-        }
+        Log.d("State Change", "App is now Running")
+        onResume()
+        Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
+
+//        if (heartRateSensor != null){
+//            Log.d("Heart Rate Sensor", "heartRateSensor is not null, start listener")
+//            onResume()
+//            Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
+////            while (state.value == AppState.RUNNING) {
+////
+////            }
+//        }
     }
 
     fun appStopping(state: MutableState<AppState>){
@@ -279,37 +258,6 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
     fun appResuming(state: MutableState<AppState>){
         //resume button was pressed, what will you do?
 
-    }
-
-    // ***-----------------[ Sensor Functions
-
-
-    //TODO: IMPLEMENT PERMISSION!
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == BODY_SENSORS_PERMISSION_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Permission granted; proceed with sensor usage
-//                // ...
-//            } else {
-//                // Permission denied; handle accordingly
-//                // ...
-//            }
-//        }
-//    }
-
-    override fun onResume() {
-        super.onResume()
-        sensorManager.registerListener(sensorListener, heartRateSensor, SensorManager.SENSOR_STATUS_ACCURACY_LOW)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        sensorManager.unregisterListener(sensorListener, heartRateSensor)
     }
 
     // ***-----------------[ Misc
@@ -332,47 +280,39 @@ class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
         )
     }
 
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        TODO("Not yet implemented")
-    }
+    // ***-----------------[ Sensor Functions
 
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        TODO("Not yet implemented")
-    }
 
-    fun hasPermission(){
-        EasyPermissions.hasPermissions(
-            this,
-            Manifest.permission.BODY_SENSORS
-        )
-    }
-
-    fun requestPermission(){
-        EasyPermissions.requestPermissions(
-            this,
-            "These permissions are required for this application",
-            BODY_SENSORS_PERMISSION_CODE,
-            Manifest.permission.BODY_SENSORS
-        )
-        Log.d("Requesting Permission", "Requesting permission now!")
-    }
-
+    //TODO: IMPLEMENT PERMISSION!
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(BODY_SENSORS_PERMISSION_CODE, permissions, grantResults, this)
+        if (requestCode == BODY_SENSORS_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted; proceed with sensor usage
+                // ...
+            } else {
+                // Permission denied; handle accordingly
+                // ...
+            }
+        }
     }
-}
 
-// Separate class implementing SensorEventListener
-class SensorListener : SensorEventListener {
-    private var heartRateValue : Float = 0.0f
+    override fun onResume() {
+        super.onResume()
+        if (heartRateSensor != null){
+            Log.d("Heart Rate Sensor", "heartRateSensor is not null, start listener")
+            sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Handle accuracy changes if needed
+    override fun onPause() {
+        super.onPause()
+        Log.d("Heart Rate Sensor", "Stop Listener")
+        sensorManager.unregisterListener(this, heartRateSensor)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -383,7 +323,7 @@ class SensorListener : SensorEventListener {
         }
     }
 
-    fun getHeartRateValue(): Float{
-        return heartRateValue
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        return
     }
 }
