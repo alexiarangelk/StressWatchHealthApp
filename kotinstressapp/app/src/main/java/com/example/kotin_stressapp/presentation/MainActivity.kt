@@ -1,5 +1,6 @@
 package com.example.kotin_stressapp.presentation
 
+import android.Manifest
 import android.util.Log
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,17 +26,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.vmadalin.easypermissions.EasyPermissions
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() , EasyPermissions.PermissionCallbacks{
 
     private lateinit var sensorManager : SensorManager
     private var heartRateSensor : Sensor ?= null
     private var heartRateValue : Float = 0.0f
     private val sensorListener = SensorListener()
+    private val BODY_SENSORS_PERMISSION_CODE = 123
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
 
     // ***-----------------[ Main Functions
 
@@ -44,10 +54,51 @@ class MainActivity : ComponentActivity() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
 
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.BODY_SENSORS
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // Request the permission
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(Manifest.permission.BODY_SENSORS),
+//                BODY_SENSORS_PERMISSION_CODE
+//            )
+//        } else {
+//            Log.d("Requesting Permission", "Permission already granted")
+//        }
+
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.BODY_SENSORS
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // Request the permission
+//            requestPermissionLauncher = registerForActivityResult(
+//                ActivityResultContracts.RequestPermission()
+//            ) { isGranted ->
+//                if (isGranted) {
+//                    // PERMISSION GRANTED
+//                    Log.d("Requesting Permission", "Permission granted")
+//                } else {
+//                    // PERMISSION NOT GRANTED
+//                    Log.d("Requesting Permission", "Permission denied")
+//                }
+//            }
+//        } else {
+//            Log.d("Requesting Permission", "Permission already granted")
+//        }
+
         super.onCreate(savedInstanceState)
         setContent {
             WearApp("Android")
         }
+    }
+
+
+    fun bodyPermissionRequest() {
+        requestPermissionLauncher.launch(Manifest.permission.BODY_SENSORS)
     }
 
     @Composable
@@ -239,6 +290,7 @@ class MainActivity : ComponentActivity() {
 //        permissions: Array<out String>,
 //        grantResults: IntArray
 //    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 //        if (requestCode == BODY_SENSORS_PERMISSION_CODE) {
 //            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                // Permission granted; proceed with sensor usage
@@ -278,6 +330,40 @@ class MainActivity : ComponentActivity() {
             fontSize = 14.sp,
             text = accompanyingName
         )
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        TODO("Not yet implemented")
+    }
+
+    fun hasPermission(){
+        EasyPermissions.hasPermissions(
+            this,
+            Manifest.permission.BODY_SENSORS
+        )
+    }
+
+    fun requestPermission(){
+        EasyPermissions.requestPermissions(
+            this,
+            "These permissions are required for this application",
+            BODY_SENSORS_PERMISSION_CODE,
+            Manifest.permission.BODY_SENSORS
+        )
+        Log.d("Requesting Permission", "Requesting permission now!")
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(BODY_SENSORS_PERMISSION_CODE, permissions, grantResults, this)
     }
 }
 
