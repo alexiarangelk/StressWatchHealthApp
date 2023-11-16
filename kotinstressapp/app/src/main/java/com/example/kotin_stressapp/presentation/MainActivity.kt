@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.wear.compose.material.Button
@@ -18,11 +17,8 @@ import androidx.wear.compose.material.Text
 import com.example.kotin_stressapp.presentation.theme.KotinstressappTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 
 import android.content.Context
@@ -31,22 +27,25 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.compose.runtime.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 
 class MainActivity : ComponentActivity() , SensorEventListener {
 
     private lateinit var sensorManager : SensorManager
     private var heartRateSensor : Sensor ?= null
-    private var heartRateValue : Float = 0.0f
-//    private val sensorListener = SensorListener()
+//    private var heartRateValue : MutableLiveData<Float> = MutableLiveData(0.0f)
+    var heartRateValue by mutableStateOf(0.0f)
     private val BODY_SENSORS_PERMISSION_CODE = 123
-
 
     // ***-----------------[ Main Functions
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
 
@@ -64,10 +63,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         } else {
             Log.d("Requesting Permission", "Permission already granted")
         }
-
-
-
-        super.onCreate(savedInstanceState)
         setContent {
             WearApp("Android")
         }
@@ -159,6 +154,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                                 } else { //app is running
                                     //prepare for pause
                                     Text("Pause")
+                                    appResuming(appState)
                                 }
 
                             }
@@ -230,34 +226,21 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         Log.d("State Change", "App is now Running")
         onResume()
         Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
-
-//        if (heartRateSensor != null){
-//            Log.d("Heart Rate Sensor", "heartRateSensor is not null, start listener")
-//            onResume()
-//            Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
-////            while (state.value == AppState.RUNNING) {
-////
-////            }
-//        }
     }
 
     fun appStopping(state: MutableState<AppState>){
         //stop button was pressed, what will you do?
-        while (state.value == AppState.STOPPED) {
-            break
-        }
+        onPause()
     }
 
     fun appPausing(state: MutableState<AppState>){
         //pause button was pressed, what will you do?
-        while (state.value == AppState.PAUSE) {
-            break
-        }
+        onPause()
     }
 
     fun appResuming(state: MutableState<AppState>){
         //resume button was pressed, what will you do?
-
+        onResume()
     }
 
     // ***-----------------[ Misc
@@ -317,6 +300,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
+            Log.d("Heart Rate Sensor", "We're updating values onSensorChanged")
             if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
                 heartRateValue = event.values[0]
             }
