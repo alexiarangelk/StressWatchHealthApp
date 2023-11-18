@@ -27,18 +27,32 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.SystemClock
 import androidx.compose.runtime.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.sql.Timestamp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import java.util.concurrent.TimeUnit
+import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() , SensorEventListener {
 
     private lateinit var sensorManager : SensorManager
+
+    //[ Heart Sensor ]
     private var heartRateSensor : Sensor ?= null
-//    private var heartRateValue : MutableLiveData<Float> = MutableLiveData(0.0f)
+
+    //Heart Rate
     var heartRateValue by mutableStateOf(0.0f)
+    //Heart Rate Variability (HRV)
+    var hrvValue by mutableStateOf(0.0)
+    var hrvStartTime = System.currentTimeMillis() * 1000000
+    var hrvTimeBetween = longArrayOf()
+    var hrvArrayCap = 5
+//    var hrvStartTime by mutableStateOf(System.currentTimeMillis())
+
     private val BODY_SENSORS_PERMISSION_CODE = 123
 
     // ***-----------------[ Main Functions
@@ -163,55 +177,34 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
                     if (appState.value == AppState.RUNNING){
                         Log.d("appState.value == AppState.RUNNING", "Should be displaying the value")
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate: $heartRateValue bpm"
-                        )
+
+                        DataDisplayText("Heart Rate: $heartRateValue bpm")
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        if(hrvValue == -1.0){
+                            DataDisplayText("Heart Rate Variability: Awaiting More Data...")
+                        }
+                        else{
+                            DataDisplayText("Heart Rate Variability: $hrvValue per ms")
+                        }
+                        DataDisplayText("Heart Rate Variability: $hrvValue per ms")
 
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate Variability: [] per minute"
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Breathing Rate: [] per minute"
-                        )
+                        DataDisplayText("Breathing Rate: [] per minute")
                     }
                     else if (appState.value == AppState.PAUSE){
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate: $heartRateValue bpm"
-                        )
+                        DataDisplayText("Heart Rate: $heartRateValue bpm")
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate Variability: [] per minute"
-                        )
+
+                        if(hrvValue == -1.0){
+                            DataDisplayText("Heart Rate Variability: Awaiting More Data...")
+                        }
+                        else{
+                            DataDisplayText("Heart Rate Variability: $hrvValue per ms")
+                        }
+
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Breathing Rate: [] per minute"
-                        )
+                        DataDisplayText("Breathing Rate: [] per minute")
                     }
                     Spacer(modifier = Modifier.height(25.dp))
                 }
@@ -263,6 +256,17 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         )
     }
 
+    @Composable
+    fun DataDisplayText(ourDataString: String) {
+        Text(
+            modifier = Modifier.width(140.dp),
+            textAlign = TextAlign.Left,
+            color = MaterialTheme.colors.secondary,
+            fontSize = 14.sp,
+            text = ourDataString
+        )
+    }
+
     // ***-----------------[ Sensor Functions
 
 
@@ -288,7 +292,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onResume()
         if (heartRateSensor != null){
             Log.d("Heart Rate Sensor", "heartRateSensor is not null, start listener")
-            sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST)
         }
     }
 
@@ -302,12 +306,60 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         if (event != null) {
             Log.d("Heart Rate Sensor", "We're updating values onSensorChanged")
             if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
+                //heart rate sensor
                 heartRateValue = event.values[0]
+
+                //heart rate variability
+                val hrvEndTime = event.timestamp
+//                hrvValue = TimeUnit.NANOSECONDS.toMillis(hrvEndTime - hrvStartTime);
+//                Log.d("HRV Sensor", "hrvStartTime")
+//                Log.d("HRV Sensor", hrvStartTime.toString())
+//                Log.d("HRV Sensor", "hrvEndTime")
+//                Log.d("HRV Sensor", hrvEndTime.toString())
+//                Log.d("HRV Sensor", "End Result:")
+//                Log.d("HRV Sensor", hrvValue.toString())
+                prepareHRV(TimeUnit.NANOSECONDS.toMillis(hrvEndTime - hrvStartTime))
+                hrvValue = calculateHRV()
+                Log.d("HRV Sensor", "hrvValue to string is...")
+                Log.d("HRV Sensor", hrvValue.toString())
+                hrvStartTime = hrvEndTime;
             }
         }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         return
+    }
+
+    fun prepareHRV(newInterval : Long){
+        //if we don't have _ items in our list of intervals
+        if (hrvTimeBetween.size < hrvArrayCap){
+            //keep adding to the end
+            hrvTimeBetween += newInterval
+        }
+        else{
+            //shift so the most recent number can be added and the furthest one is deleted
+            hrvTimeBetween = hrvTimeBetween.copyOfRange(1, hrvTimeBetween.size) + newInterval
+        }
+//        Log.d("HRV Sensor", hrvTimeBetween.size.toString())
+//        Log.d("HRV Sensor", hrvTimeBetween.contentToString())
+    }
+
+    fun calculateHRV(): Double{
+        //actually calculate HRV
+        if (hrvTimeBetween.size < (hrvArrayCap + 3)){
+            //we need more time to collect data
+            //note, we add the + 3 offset to account for errors in first few data points
+            return -1.0
+        }
+        else{
+            return hrvTimeBetween.stdDev()
+        }
+    }
+
+    fun LongArray.stdDev(): Double {
+        val mean = average()
+        val sumOfSquaredDifferences = map { (it - mean).toDouble() }.sumOf { it * it }
+        return sqrt(sumOfSquaredDifferences / size)
     }
 }
