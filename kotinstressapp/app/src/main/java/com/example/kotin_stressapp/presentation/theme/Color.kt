@@ -3,19 +3,19 @@ package com.example.kotin_stressapp.presentation.theme
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material.Colors
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Red400 = Color(0xFFCF6679)
+val Color1 = Color(0xFF00D8FF)
+val Color2 = Color(0xFF0EFFC7)
+val Color3 = Color(0xFFFFDB93)
+val Color4 = Color(0xFF2E5BFF)
+val Color5 = Color(0xFFFF5656)
 
 internal val wearColorPalette: Colors = Colors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    secondaryVariant = Teal200,
-    error = Red400,
+    primary = Color1,
+    primaryVariant = Color2,
+    secondary = Color3,
+    secondaryVariant = Color4,
+    error = Color5,
     onPrimary = Color.Black,
-    onSecondary = Color.Black,
+    onSecondary = Color1,
     onError = Color.Black
 )
