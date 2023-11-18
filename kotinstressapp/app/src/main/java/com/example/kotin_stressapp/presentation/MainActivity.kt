@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
     //Heart Rate Variability (HRV)
     var hrvValue by mutableStateOf(0.0)
     var hrvRRInterval = floatArrayOf()
-    var hrvArrayCap = 8
+    var hrvArrayCap = 3
     var hrvOffset = 0
 
     private val BODY_SENSORS_PERMISSION_CODE = 123
@@ -347,9 +347,17 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
 
                 //heart rate variability
-                prepareHRV(heartRateValue)
-                hrvValue = calculateHRV()
-                hrvValue = hrvValue.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+                val spareHRV = hrvValue
+                try {
+                    prepareHRV(heartRateValue)
+                    hrvValue = calculateHRV()
+                    hrvValue = hrvValue.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+                } catch (e : Exception) {
+                    Log.d("Heart Rate Variability", "Exception happened, returning $spareHRV")
+                    hrvValue = spareHRV
+                    // exception happened, just don't return this new bad value
+                }
+
                 Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
             }
         }
@@ -403,5 +411,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         val rmssd = sqrt(meanSquaredDifference)
 
         return rmssd
+
     }
 }
