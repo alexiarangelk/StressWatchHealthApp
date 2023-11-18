@@ -27,18 +27,41 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.SystemClock
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.sql.Timestamp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.wear.compose.material.ButtonDefaults
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.concurrent.TimeUnit
+import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() , SensorEventListener {
 
     private lateinit var sensorManager : SensorManager
+
+    //[ Heart Sensor ]
     private var heartRateSensor : Sensor ?= null
-//    private var heartRateValue : MutableLiveData<Float> = MutableLiveData(0.0f)
+
+    //Heart Rate
     var heartRateValue by mutableStateOf(0.0f)
+    //Heart Rate Variability (HRV)
+    var hrvValue by mutableStateOf(0.0)
+    var hrvRRInterval = floatArrayOf()
+    var hrvArrayCap = 8
+    var hrvOffset = 0
+
     private val BODY_SENSORS_PERMISSION_CODE = 123
 
     // ***-----------------[ Main Functions
@@ -114,104 +137,84 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                     ) {
                         // Row content
                         if (appState.value == AppState.STOPPED) { //while app is not running
+                            onPause()
                             Button(
                                 onClick = { //running the app
-                                    Log.d("Button - Start", "button clicked")
                                     appState.value = AppState.RUNNING
                                     appRunning(appState)
-                                }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    MaterialTheme.colors.secondaryVariant
+                                )
                             ) {
                                 Text("Start")
                             }
                         } else { //while app is running OR paused
-                            Log.d("Button - Stop/Pause", "button should have changed")
                             Button(
                                 onClick = { //stopping the app
                                     appState.value = AppState.STOPPED
                                     appStopping(appState)
 
-                                }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    MaterialTheme.colors.secondaryVariant
+                                )
                             ) {
                                 Text("Stop")
                             }
 
                             //Resume + Pause buttons
-                            Button(
-                                onClick = {
-                                    if (appState.value == AppState.PAUSE) { //app is paused
-                                        //unpause it
+                            if (appState.value == AppState.PAUSE) { //app is paused
+                                //prepare for resume
+                                Button(
+                                    onClick = {
                                         appState.value = AppState.RUNNING
-                                    } else { //app is running
-                                        //pause it
+                                        appResuming(appState)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondaryVariant),
+                                    modifier = Modifier.width(70.dp)
+                                ) { Text("Resume") }
+                            } else { //app is running
+                                //prepare for pause
+                                Button(
+                                    onClick = {
                                         appState.value = AppState.PAUSE
                                         appPausing(appState)
-                                    }
-                                }
-                            ) {
-                                if (appState.value == AppState.PAUSE) { //app is paused
-                                    //prepare for resume
-                                    Text("Resume")
-                                } else { //app is running
-                                    //prepare for pause
-                                    Text("Pause")
-                                    appResuming(appState)
-                                }
-
+                                    },
+                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondaryVariant),
+                                ) { Text("Pause") }
                             }
                         }
                     }
 
                     if (appState.value == AppState.RUNNING){
-                        Log.d("appState.value == AppState.RUNNING", "Should be displaying the value")
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate: $heartRateValue bpm"
-                        )
+
+                        DataDisplayText("Heart Rate: ", "$heartRateValue bpm", MaterialTheme.colors.primary)
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        if(hrvValue == -1.0){
+                            DataDisplayText("Heart Rate Variability: ", "Awaiting More Data...", MaterialTheme.colors.error)
+                        }
+                        else{
+                            DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.primary)
+                        }
 
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate Variability: [] per minute"
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Breathing Rate: [] per minute"
-                        )
+                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.secondary)
                     }
                     else if (appState.value == AppState.PAUSE){
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate: $heartRateValue bpm"
-                        )
+                        DataDisplayText("Heart Rate: ", "$heartRateValue bpm", MaterialTheme.colors.error)
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Heart Rate Variability: [] per minute"
-                        )
+
+                        if(hrvValue == -1.0){
+                            DataDisplayText("Heart Rate Variability: ", "Awaiting More Data...", MaterialTheme.colors.error)
+                        }
+                        else{
+                            DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.error)
+                        }
+
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            modifier = Modifier.width(140.dp),
-                            textAlign = TextAlign.Left,
-                            color = MaterialTheme.colors.secondary,
-                            fontSize = 14.sp,
-                            text = "Breathing Rate: [] per minute"
-                        )
+                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.error)
                     }
                     Spacer(modifier = Modifier.height(25.dp))
                 }
@@ -223,23 +226,37 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
     fun appRunning(state: MutableState<AppState>) {
         //start button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
         Log.d("State Change", "App is now Running")
         onResume()
-        Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
     }
 
     fun appStopping(state: MutableState<AppState>){
         //stop button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Stopping")
         onPause()
+        //------ send all the data we need onwards to the phone app
+
+        //------ reset data for next recording
+        //heart rate
+        heartRateValue = 0.0f
+        //Heart Rate Variability (HRV)
+        hrvValue = 0.0
+        hrvRRInterval = hrvRRInterval.drop(hrvRRInterval.size).toTypedArray().toFloatArray()
     }
 
     fun appPausing(state: MutableState<AppState>){
         //pause button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Pausing")
         onPause()
     }
 
     fun appResuming(state: MutableState<AppState>){
         //resume button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Running")
         onResume()
     }
 
@@ -252,14 +269,38 @@ class MainActivity : ComponentActivity() , SensorEventListener {
             textAlign = TextAlign.Center,
             fontSize = 18.sp,
             color = MaterialTheme.colors.primary,
+            fontWeight = FontWeight.Bold,
             text = greetingName
         )
         Text(
             modifier = Modifier.width(140.dp),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.secondary,
+            color = MaterialTheme.colors.primaryVariant,
             fontSize = 14.sp,
             text = accompanyingName
+        )
+    }
+
+    @Composable
+    fun DataDisplayText(header : String, data : String, dataColor : Color) {
+        Text(
+            buildAnnotatedString {
+                withStyle( style = SpanStyle(
+                    color = MaterialTheme.colors.secondary,
+                    fontWeight = FontWeight.Bold,
+
+                )){
+                    append(header)
+                }
+                withStyle( style = SpanStyle(
+                    color = dataColor,
+                )){
+                    append(data)
+                }
+            },
+            modifier = Modifier.width(140.dp),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Left
         )
     }
 
@@ -288,7 +329,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onResume()
         if (heartRateSensor != null){
             Log.d("Heart Rate Sensor", "heartRateSensor is not null, start listener")
-            sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST)
         }
     }
 
@@ -300,14 +341,76 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-            Log.d("Heart Rate Sensor", "We're updating values onSensorChanged")
             if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
+                //heart rate sensor
                 heartRateValue = event.values[0]
+                Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
+
+                //heart rate variability
+                val spareHRV = hrvValue
+                try {
+                    prepareHRV(heartRateValue)
+                    hrvValue = calculateHRV()
+                    hrvValue = hrvValue.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+                } catch (e : Exception) {
+                    Log.d("Heart Rate Variability", "Exception happened, returning $spareHRV")
+                    hrvValue = spareHRV
+                    // exception happened, just don't return this new bad value
+                }
+
+                Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
             }
         }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         return
+    }
+
+    //HRV Shenanigans
+
+    fun prepareHRV(newInterval : Float){
+        //if we don't have _ items in our list of intervals
+        if (hrvRRInterval.size < hrvArrayCap){
+            //keep adding to the end
+            hrvRRInterval += (60000 / newInterval)
+        }
+        else{
+            //shift so the most recent number can be added and the furthest one is deleted
+            hrvRRInterval = hrvRRInterval.copyOfRange(1, hrvRRInterval.size) + (60000 / newInterval)
+            //for bad value filtering
+            if (hrvOffset < 3){ hrvOffset += 1 }
+        }
+    }
+
+    fun calculateHRV(): Double{
+        //actually calculate HRV
+        if ((hrvRRInterval.size + hrvOffset) < (hrvArrayCap + 3)){
+            //we need more time to collect data
+            //note, we add the + 3 offset to account for errors in first few data points
+            return -1.0
+        }
+        else{
+            return calculateRMSSD(hrvRRInterval)
+        }
+    }
+
+    fun calculateRMSSD(rrIntervals: FloatArray): Double {
+        val squaredDifferences = mutableListOf<Double>()
+
+        // Calculate squared differences of successive R-R intervals
+        for (i in 1 until rrIntervals.size) {
+            val difference = rrIntervals[i] - rrIntervals[i - 1]
+            squaredDifferences.add(difference.pow(2).toDouble())
+        }
+
+        // Calculate the mean of squared differences
+        val meanSquaredDifference = squaredDifferences.average()
+
+        // Calculate the square root of the mean squared difference
+        val rmssd = sqrt(meanSquaredDifference)
+
+        return rmssd
+
     }
 }
