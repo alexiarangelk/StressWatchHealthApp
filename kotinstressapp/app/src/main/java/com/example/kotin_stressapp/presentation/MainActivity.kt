@@ -71,7 +71,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
-        onPause()
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -138,9 +137,9 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                     ) {
                         // Row content
                         if (appState.value == AppState.STOPPED) { //while app is not running
+                            onPause()
                             Button(
                                 onClick = { //running the app
-                                    Log.d("Button - Start", "button clicked")
                                     appState.value = AppState.RUNNING
                                     appRunning(appState)
                                 },
@@ -151,7 +150,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                                 Text("Start")
                             }
                         } else { //while app is running OR paused
-                            Log.d("Button - Stop/Pause", "button should have changed")
                             Button(
                                 onClick = { //stopping the app
                                     appState.value = AppState.STOPPED
@@ -190,7 +188,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                     }
 
                     if (appState.value == AppState.RUNNING){
-                        Log.d("appState.value == AppState.RUNNING", "Should be displaying the value")
 
                         DataDisplayText("Heart Rate: ", "$heartRateValue bpm", MaterialTheme.colors.primary)
                         Spacer(modifier = Modifier.height(2.dp))
@@ -229,23 +226,37 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
     fun appRunning(state: MutableState<AppState>) {
         //start button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
         Log.d("State Change", "App is now Running")
         onResume()
-        Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
     }
 
     fun appStopping(state: MutableState<AppState>){
         //stop button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Stopping")
         onPause()
+        //------ send all the data we need onwards to the phone app
+
+        //------ reset data for next recording
+        //heart rate
+        heartRateValue = 0.0f
+        //Heart Rate Variability (HRV)
+        hrvValue = 0.0
+        hrvRRInterval = hrvRRInterval.drop(hrvRRInterval.size).toTypedArray().toFloatArray()
     }
 
     fun appPausing(state: MutableState<AppState>){
         //pause button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Pausing")
         onPause()
     }
 
     fun appResuming(state: MutableState<AppState>){
         //resume button was pressed, what will you do?
+        Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
+        Log.d("State Change", "App is now Running")
         onResume()
     }
 
@@ -333,11 +344,13 @@ class MainActivity : ComponentActivity() , SensorEventListener {
             if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
                 //heart rate sensor
                 heartRateValue = event.values[0]
+                Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
 
                 //heart rate variability
                 prepareHRV(heartRateValue)
                 hrvValue = calculateHRV()
                 hrvValue = hrvValue.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+                Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
             }
         }
     }
