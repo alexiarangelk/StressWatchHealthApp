@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
     //Heart Rate Variability (HRV)
     var hrvValue by mutableStateOf(0.0)
     var hrvRRInterval = floatArrayOf()
-    var hrvArrayCap = 3
+    var hrvArrayCap = 8
     var hrvOffset = 0
 
     private val BODY_SENSORS_PERMISSION_CODE = 123
