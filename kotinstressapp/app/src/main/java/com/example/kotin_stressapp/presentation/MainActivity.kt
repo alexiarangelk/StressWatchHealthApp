@@ -1,51 +1,51 @@
 package com.example.kotin_stressapp.presentation
 
 import android.Manifest
-import android.util.Log
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import com.example.kotin_stressapp.presentation.theme.KotinstressappTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.SystemClock
+import android.net.ConnectivityManager
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.sql.Timestamp
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
-import java.math.BigDecimal
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
+import com.example.kotin_stressapp.presentation.theme.KotinstressappTheme
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.Wearable
+import org.json.JSONException
+import org.json.JSONObject
 import java.math.RoundingMode
-import java.util.concurrent.TimeUnit
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.pow
-import kotlin.math.round
 import kotlin.math.sqrt
+
 
 class MainActivity : ComponentActivity() , SensorEventListener {
 
@@ -56,13 +56,16 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
     //Heart Rate
     var heartRateValue by mutableStateOf(0.0f)
+    val hrMap = mutableMapOf<String, Float>()
     //Heart Rate Variability (HRV)
     var hrvValue by mutableStateOf(0.0)
     var hrvRRInterval = floatArrayOf()
     var hrvArrayCap = 8
     var hrvOffset = 0
+    val hrvMap = mutableMapOf<String, Double>()
 
     private val BODY_SENSORS_PERMISSION_CODE = 123
+    //var connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     // ***-----------------[ Main Functions
 
@@ -86,6 +89,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         } else {
             Log.d("Requesting Permission", "Permission already granted")
         }
+
         setContent {
             WearApp("Android")
         }
@@ -238,12 +242,85 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         onPause()
         //------ send all the data we need onwards to the phone app
 
+        //connect to wifi
+//        connectivityManager.requestNetwork(
+//            NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build(),
+//            callback
+//        )
+//        startActivity(Intent("com.google.android.clockwork.settings.connectivity.wifi.ADD_NETWORK_SETTINGS"))
+
+        try {
+            val `object` = JSONObject()
+            `object`.put("heart_rate", hrMap.toString())
+            `object`.put("heart_rate_variability", hrvMap.toString())
+            MessageSender("/MessageChannel", `object`.toString(), applicationContext).start()
+
+        } catch (e: JSONException) {
+            Log.d("Data Sending", "Failed to send data to mobile device")
+        }
+
         //------ reset data for next recording
         //heart rate
         heartRateValue = 0.0f
         //Heart Rate Variability (HRV)
         hrvValue = 0.0
         hrvRRInterval = hrvRRInterval.drop(hrvRRInterval.size).toTypedArray().toFloatArray()
+
+        hrMap.clear()
+        hrvMap.clear()
+
+        //disconnect to wifi if not needed anymore
+//        connectivityManager.bindProcessToNetwork(null)
+//        connectivityManager.unregisterNetworkCallback(callback)
+    }
+
+//    val callback = object : ConnectivityManager.NetworkCallback() {
+//        override fun onAvailable(network: Network) {
+//            super.onAvailable(network)
+//            // The Wi-Fi network has been acquired. Bind it to use this network by default.
+//            connectivityManager.bindProcessToNetwork(network)
+//        }
+//
+//        override fun onLost(network: Network) {
+//            super.onLost(network)
+//            // Called when a network disconnects or otherwise no longer satisfies this request or callback.
+//        }
+//    }
+
+    fun sendDataToPhone() {
+        // Create a PutDataMapRequest
+
+    }
+
+    internal class MessageSender(var path: String, var message: String, var context: Context) :
+        Thread() {
+        override fun run() {
+            try {
+                val nodeListTask: Task<List<Node>> = Wearable.getNodeClient(
+                    context.applicationContext
+                ).connectedNodes
+                val nodes: List<Node> = Tasks.await<List<Node>>(nodeListTask)
+                val payload = message.toByteArray()
+                for (node in nodes) {
+                    val nodeId: String = node.getId()
+                    val sendMessageTask = Wearable.getMessageClient(
+                        context
+                    ).sendMessage(nodeId, path, payload)
+                    try {
+                        Tasks.await(sendMessageTask)
+                    } catch (exception: java.lang.Exception) {
+                        // TODO: Implement exception handling
+                        Log.e(TAG, "Exception thrown")
+                    }
+                }
+            } catch (exception: java.lang.Exception) {
+                Log.e(TAG, exception.message!!)
+            }
+        }
+
+        companion object {
+            private const val TAG = "MessageSender"
+        }
     }
 
     fun appPausing(state: MutableState<AppState>){
@@ -342,9 +419,15 @@ class MainActivity : ComponentActivity() , SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
             if (event.sensor.type == Sensor.TYPE_HEART_RATE) {
+
+                val timeNow = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS").withZone(
+                    TimeZone.getDefault().toZoneId()).format(Instant.now()).toString()
+
                 //heart rate sensor
                 heartRateValue = event.values[0]
+                hrMap[timeNow] = heartRateValue
                 Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
+                Log.d("Heart Rate Sensor", "hr map is $hrMap")
 
                 //heart rate variability
                 val spareHRV = hrvValue
@@ -352,13 +435,14 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                     prepareHRV(heartRateValue)
                     hrvValue = calculateHRV()
                     hrvValue = hrvValue.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+                    hrvMap[timeNow] = hrvValue
                 } catch (e : Exception) {
                     Log.d("Heart Rate Variability", "Exception happened, returning $spareHRV")
                     hrvValue = spareHRV
-                    // exception happened, just don't return this new bad value
+                    hrvMap[timeNow] = -1.0  //returning error indicator
                 }
-
                 Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
+                Log.d("Heart Rate Variability Sensor", "hrv map is $hrvMap")
             }
         }
     }
