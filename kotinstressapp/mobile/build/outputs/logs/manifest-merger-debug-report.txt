@@ -1,0 +1,249 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+MERGED from [com.google.android.material:material:1.8.0] C:\Users\alexi\.gradle\caches\transforms-3\782ffe3b2b340b869e14bb571d6a44d2\transformed\material-1.8.0\AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\alexi\.gradle\caches\transforms-3\0a2ad1614023eb30ae220263e6d4ab15\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\161b463df37b60f885e93b5eaebee611\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\78ce624e358a1c24b8992bed850b344f\transformed\appcompat-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\25837b62ce676408b7f1a0742cc2f74d\transformed\viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\alexi\.gradle\caches\transforms-3\e8cb2c0c71223e59f27952e303c60096\transformed\fragment-1.3.6\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.6.0] C:\Users\alexi\.gradle\caches\transforms-3\fe1c0c2368bdb0a43a389377f1843f3b\transformed\activity-1.6.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\bc4d699ae2410766b299511493cb59ab\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\3d68ecf421e5b7b771ad3aeaf30ebb12\transformed\drawerlayout-1.1.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\4c55aa8c3c7cdf7ee35099a69f6c1c25\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\4fe200d1eeaa72e81a451c641fe9e19b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\76c16e8b8fb5c338f6176bc98e55eff4\transformed\transition-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\e98e343b82fb9bd8ff6c3b7ba83a1ef4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\ff660a19bf19754fe707f4d586e6f73c\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\38b921ed6d766251ad7cc4eca97986a3\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\7c4ea2f82987351d4adbd597103b3507\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d5e55288da3c1483fd34363dd52dbeea\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\b80a82baa3ddbdba794f16cae5afe528\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\147e51642df0d7bb6d124b4f8d463b2a\transformed\core-ktx-1.9.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\34ff1f33023e8892bad825e29b760be3\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\f9ab9edb16c7765a2939e080081a9079\transformed\recyclerview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\0864b689d69ca60848cd4e8a16764d83\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\f1ad0add587d2d7527077804c3c48514\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:17:1-37:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d74e87064bfd887836ee81855101ad1f\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\29e276182978cf435ef02003d6f30465\transformed\savedstate-1.2.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\abfcfa3ca70f21e59261a70c318e8861\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\bb3496ae16cea282d522be0f7dbcf438\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\24f3d5d957224a6f92ef79bc4f2f9acb\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\alexi\.gradle\caches\transforms-3\adaf226f75b578e2697e31a2fc6652c7\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\c0ed3b4b6300910df1fc7a93d3546726\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\alexi\.gradle\caches\transforms-3\d5dc97a0444dfa066a55316220000c02\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\fd8379944a6be6c864adc2289a6d3f9a\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\af5b0966a39a76fd1a59ba73555d0da6\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\804627df385a6fb0371e22edf1a6b00c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\b33f46ec6a7fd8c2f7bf7faa9110adda\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\alexi\.gradle\caches\transforms-3\13618277c2539399921cf4e9c14be4fe\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:17:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+	package
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:1-22:12
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:4:5-20:19
+MERGED from [com.google.android.material:material:1.8.0] C:\Users\alexi\.gradle\caches\transforms-3\782ffe3b2b340b869e14bb571d6a44d2\transformed\material-1.8.0\AndroidManifest.xml:24:5-20
+MERGED from [com.google.android.material:material:1.8.0] C:\Users\alexi\.gradle\caches\transforms-3\782ffe3b2b340b869e14bb571d6a44d2\transformed\material-1.8.0\AndroidManifest.xml:24:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\alexi\.gradle\caches\transforms-3\0a2ad1614023eb30ae220263e6d4ab15\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\alexi\.gradle\caches\transforms-3\0a2ad1614023eb30ae220263e6d4ab15\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:25:5-35:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\24f3d5d957224a6f92ef79bc4f2f9acb\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\24f3d5d957224a6f92ef79bc4f2f9acb\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:9:9-35
+	android:label
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:7:9-41
+	android:roundIcon
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:8:9-54
+	android:icon
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:6:9-43
+	android:allowBackup
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:5:9-35
+	android:theme
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:10:9-54
+activity#com.example.mobile.MainActivity
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:11:9-19:20
+	android:exported
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:13:13-36
+	android:name
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:12:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:14:13-18:29
+action#android.intent.action.MAIN
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:15:17-69
+	android:name
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:15:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:17:17-77
+	android:name
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml:17:27-74
+uses-sdk
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+MERGED from [com.google.android.material:material:1.8.0] C:\Users\alexi\.gradle\caches\transforms-3\782ffe3b2b340b869e14bb571d6a44d2\transformed\material-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.material:material:1.8.0] C:\Users\alexi\.gradle\caches\transforms-3\782ffe3b2b340b869e14bb571d6a44d2\transformed\material-1.8.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\alexi\.gradle\caches\transforms-3\0a2ad1614023eb30ae220263e6d4ab15\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\alexi\.gradle\caches\transforms-3\0a2ad1614023eb30ae220263e6d4ab15\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\161b463df37b60f885e93b5eaebee611\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\161b463df37b60f885e93b5eaebee611\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\78ce624e358a1c24b8992bed850b344f\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] C:\Users\alexi\.gradle\caches\transforms-3\78ce624e358a1c24b8992bed850b344f\transformed\appcompat-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\25837b62ce676408b7f1a0742cc2f74d\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\25837b62ce676408b7f1a0742cc2f74d\transformed\viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\alexi\.gradle\caches\transforms-3\e8cb2c0c71223e59f27952e303c60096\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] C:\Users\alexi\.gradle\caches\transforms-3\e8cb2c0c71223e59f27952e303c60096\transformed\fragment-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.6.0] C:\Users\alexi\.gradle\caches\transforms-3\fe1c0c2368bdb0a43a389377f1843f3b\transformed\activity-1.6.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.6.0] C:\Users\alexi\.gradle\caches\transforms-3\fe1c0c2368bdb0a43a389377f1843f3b\transformed\activity-1.6.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\bc4d699ae2410766b299511493cb59ab\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\bc4d699ae2410766b299511493cb59ab\transformed\emoji2-views-helper-1.2.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\3d68ecf421e5b7b771ad3aeaf30ebb12\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\3d68ecf421e5b7b771ad3aeaf30ebb12\transformed\drawerlayout-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\4c55aa8c3c7cdf7ee35099a69f6c1c25\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\4c55aa8c3c7cdf7ee35099a69f6c1c25\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\4fe200d1eeaa72e81a451c641fe9e19b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\4fe200d1eeaa72e81a451c641fe9e19b\transformed\dynamicanimation-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\76c16e8b8fb5c338f6176bc98e55eff4\transformed\transition-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\76c16e8b8fb5c338f6176bc98e55eff4\transformed\transition-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\e98e343b82fb9bd8ff6c3b7ba83a1ef4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\e98e343b82fb9bd8ff6c3b7ba83a1ef4\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\ff660a19bf19754fe707f4d586e6f73c\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\ff660a19bf19754fe707f4d586e6f73c\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\38b921ed6d766251ad7cc4eca97986a3\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\38b921ed6d766251ad7cc4eca97986a3\transformed\legacy-support-core-utils-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\7c4ea2f82987351d4adbd597103b3507\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\7c4ea2f82987351d4adbd597103b3507\transformed\loader-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d5e55288da3c1483fd34363dd52dbeea\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d5e55288da3c1483fd34363dd52dbeea\transformed\lifecycle-viewmodel-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\b80a82baa3ddbdba794f16cae5afe528\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\b80a82baa3ddbdba794f16cae5afe528\transformed\lifecycle-viewmodel-savedstate-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\147e51642df0d7bb6d124b4f8d463b2a\transformed\core-ktx-1.9.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\147e51642df0d7bb6d124b4f8d463b2a\transformed\core-ktx-1.9.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\34ff1f33023e8892bad825e29b760be3\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\34ff1f33023e8892bad825e29b760be3\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\f9ab9edb16c7765a2939e080081a9079\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\f9ab9edb16c7765a2939e080081a9079\transformed\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\0864b689d69ca60848cd4e8a16764d83\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] C:\Users\alexi\.gradle\caches\transforms-3\0864b689d69ca60848cd4e8a16764d83\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\f1ad0add587d2d7527077804c3c48514\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\f1ad0add587d2d7527077804c3c48514\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d74e87064bfd887836ee81855101ad1f\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\d74e87064bfd887836ee81855101ad1f\transformed\lifecycle-runtime-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\29e276182978cf435ef02003d6f30465\transformed\savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\29e276182978cf435ef02003d6f30465\transformed\savedstate-1.2.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\abfcfa3ca70f21e59261a70c318e8861\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\abfcfa3ca70f21e59261a70c318e8861\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\bb3496ae16cea282d522be0f7dbcf438\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\bb3496ae16cea282d522be0f7dbcf438\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\24f3d5d957224a6f92ef79bc4f2f9acb\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\24f3d5d957224a6f92ef79bc4f2f9acb\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\alexi\.gradle\caches\transforms-3\adaf226f75b578e2697e31a2fc6652c7\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\alexi\.gradle\caches\transforms-3\adaf226f75b578e2697e31a2fc6652c7\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\c0ed3b4b6300910df1fc7a93d3546726\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.5.1] C:\Users\alexi\.gradle\caches\transforms-3\c0ed3b4b6300910df1fc7a93d3546726\transformed\lifecycle-livedata-core-2.5.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\alexi\.gradle\caches\transforms-3\d5dc97a0444dfa066a55316220000c02\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] C:\Users\alexi\.gradle\caches\transforms-3\d5dc97a0444dfa066a55316220000c02\transformed\core-runtime-2.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\fd8379944a6be6c864adc2289a6d3f9a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\fd8379944a6be6c864adc2289a6d3f9a\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\af5b0966a39a76fd1a59ba73555d0da6\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\af5b0966a39a76fd1a59ba73555d0da6\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\804627df385a6fb0371e22edf1a6b00c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\804627df385a6fb0371e22edf1a6b00c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\b33f46ec6a7fd8c2f7bf7faa9110adda\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] C:\Users\alexi\.gradle\caches\transforms-3\b33f46ec6a7fd8c2f7bf7faa9110adda\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\alexi\.gradle\caches\transforms-3\13618277c2539399921cf4e9c14be4fe\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\alexi\.gradle\caches\transforms-3\13618277c2539399921cf4e9c14be4fe\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		ADDED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+		INJECTED from D:\Documents\Github_Projects\2023DigitalHealthStressWatch\StressWatchHealthApp\kotinstressapp\mobile\src\main\AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:26:9-34:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\alexi\.gradle\caches\transforms-3\e72a1d7f0395740742a496723cd08735\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] C:\Users\alexi\.gradle\caches\transforms-3\2b006b17c57462b16e2cc8a306c88464\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+permission#com.example.mobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+uses-permission#com.example.mobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] C:\Users\alexi\.gradle\caches\transforms-3\8daa366fed296cd3fd3200fda271128f\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\alexi\.gradle\caches\transforms-3\3d5c8fbfcc275128c3054a6e0262d94c\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
