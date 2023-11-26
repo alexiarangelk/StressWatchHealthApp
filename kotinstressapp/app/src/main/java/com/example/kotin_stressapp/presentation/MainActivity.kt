@@ -74,6 +74,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+        relativeHumiditySensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -202,9 +203,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                         else{
                             DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.primary)
                         }
-
-                        Spacer(modifier = Modifier.height(2.dp))
-                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.secondary)
                     }
                     else if (appState.value == AppState.PAUSE){
                         DataDisplayText("Heart Rate: ", "$heartRateValue bpm", MaterialTheme.colors.error)
@@ -216,9 +214,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                         else{
                             DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.error)
                         }
-
-                        Spacer(modifier = Modifier.height(2.dp))
-                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.error)
                     }
                     Spacer(modifier = Modifier.height(25.dp))
                 }
