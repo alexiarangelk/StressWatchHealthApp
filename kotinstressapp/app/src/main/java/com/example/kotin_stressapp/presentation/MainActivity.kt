@@ -288,8 +288,31 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 //    }
 
     fun sendDataToPhone() {
-        // Create a PutDataMapRequest
+        // Mock node ID for emulation purposes
+        val nodeId = "mockNodeId"
 
+        val path = "/heart_rate_path"
+
+        prepareHRV(heartRateValue)
+        var hrvValueToSend = calculateHRV()
+        hrvValueToSend = hrvValueToSend.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+
+        // Combine heart rate and HRV into a single string to send in array
+        val data = "HR: $heartRateValue, HRV: $hrvValueToSend"
+        val dataBytes = data.toByteArray()
+
+        // Get an instance of the Wearable MessageClient
+        val messageClient = Wearable.getMessageClient(this)
+
+        // Send the message
+        messageClient.sendMessage(nodeId, path, dataBytes).apply {
+            addOnSuccessListener {
+                Log.d("sendDataToPhone", "Message sent successfully")
+            }
+            addOnFailureListener {
+                Log.e("sendDataToPhone", "Failed to send message", it)
+            }
+        }
     }
 
     internal class MessageSender(var path: String, var message: String, var context: Context) :
