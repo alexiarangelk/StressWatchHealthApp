@@ -15,3 +15,10 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 }
+
+MessageClient.addListener(MessageClient.OnMessageRecievedListener);
+fun onMessageRecieved(messageEvent : MessageEvent) {
+    if(messageEvent.path == ) {
+
+        }
+}
