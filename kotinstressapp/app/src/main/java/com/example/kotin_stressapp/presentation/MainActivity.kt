@@ -452,6 +452,8 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
                 Log.d("Heart Rate Sensor", "hr map is $hrMap")
 
+                sendDataToPhone(heartRate, heartRateVariability)
+
                 //heart rate variability
                 val spareHRV = hrvValue
                 try {
