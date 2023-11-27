@@ -10,7 +10,9 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="-360dp" />
 
     <Button
         android:id="@+id/image_capture_button"
