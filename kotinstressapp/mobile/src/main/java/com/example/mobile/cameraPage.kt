@@ -3,7 +3,6 @@ package com.example.mobile
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
@@ -30,8 +29,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import android.os.Handler
 import android.os.Looper
+import android.widget.TextView
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
+import com.google.android.gms.wearable.DataEvent
+import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
@@ -42,6 +44,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
+import java.math.RoundingMode
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
@@ -57,6 +60,13 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
 
     private lateinit var cameraExecutor: ExecutorService
     var tflite: Interpreter? = null
+
+    private var heart_rate = 0.0
+    private var heart_rate_var = 0.0
+    private var stressLevel = 0.0
+
+    private lateinit var resultTextView: TextView
+    private val handler = Handler(Looper.getMainLooper())
     private fun loadModelFile(): MappedByteBuffer? {
         val fileDescriptor: AssetFileDescriptor = this.getAssets().openFd("model.tflite")
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
@@ -75,6 +85,8 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
         if (allPermissionsGranted()) {
             startCamera()
             startAutoCapture()
+            startListener()
+            startDataListener()
         } else {
             requestPermissions()
         }
@@ -84,12 +96,10 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
         }
-        Wearable.getMessageClient(this).addListener { messageEvent ->
-            // Use a coroutine to process the message in the background
-            CoroutineScope(Dispatchers.IO).launch {
-                processMessage(messageEvent.data)
-            }
-        }
+    }
+
+    private fun getStressLevel(): Any {
+        return stressLevel
     }
 
     private suspend fun processMessage(data: ByteArray) {
@@ -195,11 +205,55 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                     output.savedUri?.let { processImageWithPython(applicationContext, it) }
+                    val resultTextView: TextView = viewBinding.resultTextView
+                    val result = getStressLevel()
+                    resultTextView.text = "Stress Level: $result"
+                    resultTextView.height = 205
+                    resultTextView.elevation = 10f
+                    resultTextView.invalidate()
+                    Log.d("updateUI", "Result: $result")
                 }
             }
         )
     }
+    private fun startListener() {
+        Wearable.getMessageClient(this).addListener { messageEvent ->
+            try {
+                Log.d(
+                    TAG,
+                    "Message received. Path: ${messageEvent.path}, Data: ${String(messageEvent.data)}"
+                )
 
+                // Use a coroutine to process the message in the background
+                CoroutineScope(Dispatchers.IO).launch {
+                    processMessage(messageEvent.data)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error processing message: ${e.message}", e)
+            }
+        }
+    }
+    private fun startDataListener() {
+        Wearable.getDataClient(this).addListener { dataEvents ->
+            for (event in dataEvents) {
+                // Handle data event
+                if (event.type == DataEvent.TYPE_CHANGED) {
+                    // Data item changed
+                    val item = event.dataItem
+                    // Extract data from the DataMap
+                    val dataMapItem = DataMapItem.fromDataItem(item)
+                    heart_rate = dataMapItem.dataMap.getString("heart_rate")?.toDoubleOrNull()!!
+                    heart_rate_var = dataMapItem.dataMap.getString("heart_rate_var")?.toDoubleOrNull()!!
+                    if (heart_rate != null) {
+                        Log.d(TAG, (heart_rate as Any).toString())
+                    }
+                    if (heart_rate_var != null) {
+                        Log.d(TAG, (heart_rate_var as Any).toString())
+                    }
+                }
+            }
+        }
+    }
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -283,7 +337,7 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
         override fun run() {
             // Take a photo
             takePhoto()
-
+            startListener()
             // Schedule the next photo capture after a delay
             photoCaptureHandler.postDelayed(this, PHOTO_CAPTURE_INTERVAL)
         }
@@ -316,6 +370,8 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
             val result = predict(inputData)
             // Process the stress prediction as needed
             Log.d(TAG, "Stress Prediction: $result")
+
+            stressLevel = calculateProportion(heart_rate, heart_rate_var, result)
         } catch (e: Exception) {
             Log.e(TAG, "Error processing image with Python: ${e.message}", e)
         }
@@ -339,5 +395,33 @@ class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener 
             val hrvData = String(messageEvent.data)
             Log.d(TAG, "Received Heart Rate Variability: $hrvData")
         }
+    }
+    //returns percentage
+    private fun calculateProportion(hr: Double, hrv: Double, ml: Float): Double{
+        var y1 = 0.0
+        var y2 = 0.0
+
+        //hr - calculate proportion
+        if (hr > 50){
+            y1 = (hr - 50)/135
+        }
+
+        //hrv - calculate proportion
+        if (hrv < 48){
+            y2 = hrv/48
+        }
+
+        //ml - convert binary to double
+        val y3 = if (ml > .5) 1.0 else 0.0
+
+        //final equation
+        var final = ((y1 * (.4)) + (y2 * (.4)) + (y3 * (.2))) * 100
+
+        Log.d("yuh", "-----------------------------------------")
+        Log.d("Stress Equation", "HR proportion is $y1")
+        Log.d("Stress Equation", "HRV proportion is $y2")
+        Log.d("Stress Equation", "Machine Learning proportion is $y3")
+
+        return final.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
     }
 }

@@ -10,10 +10,24 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="79dp"
         tools:layout_editor_absoluteY="358dp">
     </androidx.camera.view.PreviewView>
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="match_parent"
+        android:layout_height="205dp"
+        android:gravity="center"
+        android:shadowColor="#000000"
+        android:text="Stress Level: 0.0"
+        android:textColor="#03A9F4"
+        android:textSize="34sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="1dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_centerline"

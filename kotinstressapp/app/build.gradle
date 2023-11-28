@@ -8,7 +8,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.kotin_stressapp"
+        applicationId "com.example.stressapp"
         minSdk 30
         targetSdk 33
         versionCode 1

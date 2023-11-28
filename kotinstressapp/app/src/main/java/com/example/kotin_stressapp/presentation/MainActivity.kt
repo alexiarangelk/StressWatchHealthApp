@@ -36,6 +36,7 @@ import com.example.kotin_stressapp.presentation.theme.KotinstressappTheme
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -243,7 +244,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
             val `object` = JSONObject()
             `object`.put("heart_rate", hrMap.toString())
             `object`.put("heart_rate_variability", hrvMap.toString())
-            MessageSender("/MessageChannel", `object`.toString(), applicationContext).start()
+            MessageSender("/heart_rate_path", `object`.toString(), applicationContext).start()
 
         } catch (e: JSONException) {
             Log.d("Data Sending", "Failed to send data to mobile device")
@@ -275,6 +276,13 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         val data = "{HR: $heartRateValue, HRV: $hrvValueToSend}"
         val dataBytes = data.toByteArray()
 
+        val dataMap = PutDataMapRequest.create(path)
+        dataMap.dataMap.putString("heart_rate", heartRateValue.toString())
+        dataMap.dataMap.putString("heart_rate_var", hrvValueToSend.toString())
+        val request = dataMap.asPutDataRequest()
+        val dataClient = Wearable.getDataClient(this)
+        val task = dataClient.putDataItem(request)
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val nodes = Tasks.await(Wearable.getNodeClient(applicationContext).connectedNodes)
@@ -288,6 +296,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                         Tasks.await(resultTask)
                         Log.d("sendDataToPhone", "Message sent successfully")
                         Log.d("sendDataToPhone", data)
+                        Log.d("sendDataToPhone", nodeId)
                     } catch (sendException: Exception) {
                         Log.e("sendDataToPhone", "Failed to send message", sendException)
                     }
