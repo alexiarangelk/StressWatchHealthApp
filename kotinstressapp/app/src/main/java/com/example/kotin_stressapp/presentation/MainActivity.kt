@@ -37,6 +37,9 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.RoundingMode
@@ -262,9 +265,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 //
 
     fun sendDataToPhone() {
-        // Mock node ID for emulation purposes
-        val nodeId = "mockNodeId"
-
         val path = "/heart_rate_path"
 
         prepareHRV(heartRateValue)
@@ -272,19 +272,28 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         hrvValueToSend = hrvValueToSend.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
 
         // Combine heart rate and HRV into a single string to send in array
-        val data = "HR: $heartRateValue, HRV: $hrvValueToSend"
+        val data = "{HR: $heartRateValue, HRV: $hrvValueToSend}"
         val dataBytes = data.toByteArray()
 
-        // Get an instance of the Wearable MessageClient
-        val messageClient = Wearable.getMessageClient(this)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val nodes = Tasks.await(Wearable.getNodeClient(applicationContext).connectedNodes)
+                for (node in nodes) {
+                    val nodeId = node.id
+                    // Send the message
+                    val messageClient = Wearable.getMessageClient(applicationContext)
+                    val resultTask = messageClient.sendMessage(nodeId, path, dataBytes)
 
-        // Send the message
-        messageClient.sendMessage(nodeId, path, dataBytes).apply {
-            addOnSuccessListener {
-                Log.d("sendDataToPhone", "Message sent successfully")
-            }
-            addOnFailureListener {
-                Log.e("sendDataToPhone", "Failed to send message", it)
+                    try {
+                        Tasks.await(resultTask)
+                        Log.d("sendDataToPhone", "Message sent successfully")
+                        Log.d("sendDataToPhone", data)
+                    } catch (sendException: Exception) {
+                        Log.e("sendDataToPhone", "Failed to send message", sendException)
+                    }
+                }
+            } catch (exception: Exception) {
+                Log.e("sendDataToPhone", "Failed to get connected nodes", exception)
             }
         }
     }

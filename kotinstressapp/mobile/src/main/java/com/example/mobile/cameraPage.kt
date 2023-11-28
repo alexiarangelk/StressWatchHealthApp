@@ -3,6 +3,7 @@ package com.example.mobile
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
@@ -31,6 +32,14 @@ import android.os.Handler
 import android.os.Looper
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONException
+import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
@@ -38,7 +47,7 @@ import java.nio.channels.FileChannel
 
 typealias LumaListener = (luma: Double) -> Unit
 
-class CameraPage : AppCompatActivity() {
+class CameraPage : AppCompatActivity(), MessageClient.OnMessageReceivedListener {
     private lateinit var viewBinding: ActivityCameraPageBinding
 
     private var imageCapture: ImageCapture? = null
@@ -75,7 +84,30 @@ class CameraPage : AppCompatActivity() {
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
         }
+        Wearable.getMessageClient(this).addListener { messageEvent ->
+            // Use a coroutine to process the message in the background
+            CoroutineScope(Dispatchers.IO).launch {
+                processMessage(messageEvent.data)
+            }
+        }
     }
+
+    private suspend fun processMessage(data: ByteArray) {
+        try {
+            // Convert the byte array to a String (assuming the data is in string format)
+            val message = String(data, Charsets.UTF_8)
+
+            // Depending on your use case, you might want to parse the message as JSON
+            val json = JSONObject(message)
+
+            // Extract relevant information from the JSON
+            val heartRate = json.optDouble("heart_rate", 0.0)
+            val hrv = json.optDouble("heart_rate_variability", 0.0)
+        } catch (e: JSONException) {
+            Log.e("processMessage", "Error processing message: ${e.message}", e)
+        }
+    }
+
     private fun predict(inputData: PyObject?): Float {
         try {
             val array = inputData?.toJava(FloatArray::class.java)
@@ -299,5 +331,13 @@ class CameraPage : AppCompatActivity() {
         }
         return null
     }
-
+    override fun onMessageReceived(messageEvent : MessageEvent) {
+        Log.d(TAG, "message received!!!")
+        if (messageEvent.path == "/heart_rate_path") {
+            val heartRateData = String(messageEvent.data)
+            Log.d(TAG, "Received Heart Rate: $heartRateData")
+            val hrvData = String(messageEvent.data)
+            Log.d(TAG, "Received Heart Rate Variability: $hrvData")
+        }
+    }
 }
