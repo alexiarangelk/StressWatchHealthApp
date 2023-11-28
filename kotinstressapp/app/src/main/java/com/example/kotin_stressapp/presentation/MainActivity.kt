@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
-        relativeHumiditySensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
+        var relativeHumiditySensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -261,14 +261,14 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 
 //
 
-    fun sendDataToPhone(int : heartRateValue, float : hrvValueToSend) {
+    fun sendDataToPhone() {
         // Mock node ID for emulation purposes
         val nodeId = "mockNodeId"
 
         val path = "/heart_rate_path"
 
         prepareHRV(heartRateValue)
-        hrvValueToSend = calculateHRV()
+        var hrvValueToSend = calculateHRV()
         hrvValueToSend = hrvValueToSend.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
 
         // Combine heart rate and HRV into a single string to send in array
@@ -443,7 +443,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
                 Log.d("Heart Rate Variability Sensor", "hrv map is $hrvMap")
 
-                sendDataToPhone(heartRate, heartRateVariability)
+                sendDataToPhone()
             }
         }
     }

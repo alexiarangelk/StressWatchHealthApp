@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +14,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -23,22 +23,18 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
 import android.util.Log
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
-import androidx.camera.video.FallbackStrategy
-import androidx.camera.video.MediaStoreOutputOptions
-import androidx.camera.video.Quality
-import androidx.camera.video.QualitySelector
-import androidx.camera.video.VideoRecordEvent
-import androidx.core.content.PermissionChecker
 import com.example.mobile.databinding.ActivityCameraPageBinding
-import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
 import android.os.Handler
 import android.os.Looper
+import com.chaquo.python.PyObject
 import com.chaquo.python.Python
+import org.tensorflow.lite.Interpreter
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -51,6 +47,15 @@ class CameraPage : AppCompatActivity() {
     private var recording: Recording? = null
 
     private lateinit var cameraExecutor: ExecutorService
+    var tflite: Interpreter? = null
+    private fun loadModelFile(): MappedByteBuffer? {
+        val fileDescriptor: AssetFileDescriptor = this.getAssets().openFd("model.tflite")
+        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+        val fileChannel = inputStream.channel
+        val startOffset = fileDescriptor.startOffset
+        val declareLength = fileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declareLength)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +69,60 @@ class CameraPage : AppCompatActivity() {
         } else {
             requestPermissions()
         }
-
         cameraExecutor = Executors.newSingleThreadExecutor()
+        try {
+            tflite = Interpreter(loadModelFile()!!)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+    private fun predict(inputData: PyObject?): Float {
+        try {
+            val array = inputData?.toJava(FloatArray::class.java)
+            val allZeros = array?.all { it == 0.0f } ?: false
+            if (allZeros) {
+                return 0.0f
+            }
+            val columns = 48
+            val rows = 48
+            val channels = 1
+            val batchSize = 1
+
+            val inputArray = Array(batchSize) { batch ->
+                Array(rows) { row ->
+                    Array(columns) { col ->
+                        FloatArray(channels) { channel ->
+                            array?.get((batch * rows * columns + row * columns + col) * channels + channel) ?: 0.0f
+                        }
+                    }
+                }
+            }
+
+            val outputTensorIndex = 0
+            val outputTensor = tflite?.getOutputTensor(outputTensorIndex)
+            val outputShape = outputTensor?.shape()
+
+            if (outputShape?.contentEquals(intArrayOf(1, 1)) == true) {
+                // Allocate a 2D array to store the output (1x1)
+                val outputArray = Array(batchSize) {
+                    FloatArray(1)
+                }
+
+                // Run the TensorFlow Lite interpreter
+                tflite?.run(inputArray, outputArray)
+
+                // Access the result from the outputArray
+                val result = outputArray[0][0]
+                Log.d(TAG, "Model Prediction: $result")
+                return result
+            } else {
+                Log.e(TAG, "Error: Invalid output tensor shape - $outputShape")
+                return 0.0f
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error predicting with TensorFlow Lite: ${e.message}", e)
+            return 0.0f
+        }
     }
 
     private fun takePhoto() {
@@ -222,7 +279,11 @@ class CameraPage : AppCompatActivity() {
             val imageProcessor = Python.getInstance().getModule("faces")
 
             // Call the Python function to process the image
-            imageProcessor.callAttr("detect_stress", imagePath)
+            val inputData = imageProcessor.callAttr("preprocess", imagePath)
+
+            val result = predict(inputData)
+            // Process the stress prediction as needed
+            Log.d(TAG, "Stress Prediction: $result")
         } catch (e: Exception) {
             Log.e(TAG, "Error processing image with Python: ${e.message}", e)
         }

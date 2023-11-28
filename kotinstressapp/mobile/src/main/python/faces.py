@@ -2,8 +2,7 @@ import cv2
 import dlib
 import matplotlib.pyplot as plt
 import numpy as np
-def detect_stress(file_path):
-    print(file_path)
+def preprocess(file_path):
     detector = dlib.get_frontal_face_detector()
     img = cv2.imread(file_path)
     # Check if the image is not empty
@@ -24,5 +23,10 @@ def detect_stress(file_path):
         # Display the resized face(for troubleshooting)
         #plt.imshow(resized_face, cmap='gray')
         #plt.show()
-        face_array = np.array(resized_face)
-        face_array = face_array/255
+        face_array = np.array(resized_face, dtype=np.float32) / 255.0
+        input_data = face_array
+        input_data.shape = (48*48)
+        return input_data.tolist()
+    else:
+        print("error: face not detected")
+        return [0.0] * (48*48)
