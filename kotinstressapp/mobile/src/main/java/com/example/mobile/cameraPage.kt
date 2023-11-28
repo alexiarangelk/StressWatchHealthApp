@@ -2,7 +2,9 @@ package com.example.mobile
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -103,7 +105,7 @@ class CameraPage : AppCompatActivity() {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
-                    output.savedUri?.path?.let { processImageWithPython(it) }
+                    output.savedUri?.let { processImageWithPython(applicationContext, it) }
                 }
             }
         )
@@ -211,16 +213,30 @@ class CameraPage : AppCompatActivity() {
         // Remove any pending callbacks to stop the automatic photo capture
         photoCaptureHandler.removeCallbacks(photoCaptureRunnable)
     }
-    private fun processImageWithPython(imagePath: String) {
+    private fun processImageWithPython(context: Context, imageUri: Uri) {
         try {
+            // Convert content URI to a file path
+            val imagePath = convertContentUriToFile(context, imageUri)
+
             // Import the Python module
-            val imageProcessor = Python.getInstance().getModule("image_processor")
+            val imageProcessor = Python.getInstance().getModule("faces")
 
             // Call the Python function to process the image
-            imageProcessor.callAttr("process_image", imagePath)
+            imageProcessor.callAttr("detect_stress", imagePath)
         } catch (e: Exception) {
             Log.e(TAG, "Error processing image with Python: ${e.message}", e)
         }
+    }
+    private fun convertContentUriToFile(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            if (it.moveToFirst()) {
+                return it.getString(columnIndex)
+            }
+        }
+        return null
     }
 
 }

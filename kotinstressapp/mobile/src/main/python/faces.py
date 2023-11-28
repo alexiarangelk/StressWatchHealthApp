@@ -3,8 +3,12 @@ import dlib
 import matplotlib.pyplot as plt
 import numpy as np
 def detect_stress(file_path):
+    print(file_path)
     detector = dlib.get_frontal_face_detector()
     img = cv2.imread(file_path)
+    # Check if the image is not empty
+    if img is None:
+        print('Error: Unable to load the image.')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = detector(gray)
 

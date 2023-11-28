@@ -26,6 +26,7 @@ android {
                 install "numpy"
                 install "opencv-python"
                 install "dlib"
+                install "matplotlib"
             }
         }
     }
