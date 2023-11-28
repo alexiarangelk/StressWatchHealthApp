@@ -282,14 +282,14 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 //        }
 //    }
 
-    fun sendDataToPhone() {
+    fun sendDataToPhone(int : heartRateValue, float : hrvValueToSend) {
         // Mock node ID for emulation purposes
         val nodeId = "mockNodeId"
 
         val path = "/heart_rate_path"
 
         prepareHRV(heartRateValue)
-        var hrvValueToSend = calculateHRV()
+        hrvValueToSend = calculateHRV()
         hrvValueToSend = hrvValueToSend.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
 
         // Combine heart rate and HRV into a single string to send in array
