@@ -74,6 +74,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+        relativeHumiditySensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY)
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -202,9 +203,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                         else{
                             DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.primary)
                         }
-
-                        Spacer(modifier = Modifier.height(2.dp))
-                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.secondary)
                     }
                     else if (appState.value == AppState.PAUSE){
                         DataDisplayText("Heart Rate: ", "$heartRateValue bpm", MaterialTheme.colors.error)
@@ -216,9 +214,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                         else{
                             DataDisplayText("Heart Rate Variability: ", "$hrvValue ms", MaterialTheme.colors.error)
                         }
-
-                        Spacer(modifier = Modifier.height(2.dp))
-                        DataDisplayText("Breathing Rate: ", "[] per minute", MaterialTheme.colors.error)
                     }
                     Spacer(modifier = Modifier.height(25.dp))
                 }
@@ -288,8 +283,31 @@ class MainActivity : ComponentActivity() , SensorEventListener {
 //    }
 
     fun sendDataToPhone() {
-        // Create a PutDataMapRequest
+        // Mock node ID for emulation purposes
+        val nodeId = "mockNodeId"
 
+        val path = "/heart_rate_path"
+
+        prepareHRV(heartRateValue)
+        var hrvValueToSend = calculateHRV()
+        hrvValueToSend = hrvValueToSend.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
+
+        // Combine heart rate and HRV into a single string to send in array
+        val data = "HR: $heartRateValue, HRV: $hrvValueToSend"
+        val dataBytes = data.toByteArray()
+
+        // Get an instance of the Wearable MessageClient
+        val messageClient = Wearable.getMessageClient(this)
+
+        // Send the message
+        messageClient.sendMessage(nodeId, path, dataBytes).apply {
+            addOnSuccessListener {
+                Log.d("sendDataToPhone", "Message sent successfully")
+            }
+            addOnFailureListener {
+                Log.e("sendDataToPhone", "Failed to send message", it)
+            }
+        }
     }
 
     internal class MessageSender(var path: String, var message: String, var context: Context) :
@@ -428,6 +446,8 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 hrMap[timeNow] = heartRateValue
                 Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
                 Log.d("Heart Rate Sensor", "hr map is $hrMap")
+
+                sendDataToPhone(heartRate, heartRateVariability)
 
                 //heart rate variability
                 val spareHRV = hrvValue
