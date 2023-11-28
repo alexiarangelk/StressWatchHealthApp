@@ -34,6 +34,9 @@ import com.example.mobile.databinding.ActivityCameraPageBinding
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
+import android.os.Handler
+import android.os.Looper
+import com.chaquo.python.Python
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -55,13 +58,10 @@ class CameraPage : AppCompatActivity() {
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
+            startAutoCapture()
         } else {
             requestPermissions()
         }
-
-        // Set up the listeners for take photo and video capture buttons
-        viewBinding.imageCaptureButton.setOnClickListener { takePhoto() }
-        viewBinding.videoCaptureButton.setOnClickListener { captureVideo() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
@@ -103,12 +103,11 @@ class CameraPage : AppCompatActivity() {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    output.savedUri?.path?.let { processImageWithPython(it) }
                 }
             }
         )
     }
-
-    private fun captureVideo() {}
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -188,4 +187,40 @@ class CameraPage : AppCompatActivity() {
                 startCamera()
             }
         }
+    private val photoCaptureHandler = Handler(Looper.getMainLooper())
+    private val photoCaptureRunnable = object : Runnable {
+        override fun run() {
+            // Take a photo
+            takePhoto()
+
+            // Schedule the next photo capture after a delay
+            photoCaptureHandler.postDelayed(this, PHOTO_CAPTURE_INTERVAL)
+        }
+    }
+
+    private val PHOTO_CAPTURE_INTERVAL = 5000L // 5 seconds (adjust as needed)
+
+// ...
+
+    private fun startAutoCapture() {
+        // Schedule the first photo capture immediately
+        photoCaptureHandler.post(photoCaptureRunnable)
+    }
+
+    private fun stopAutoCapture() {
+        // Remove any pending callbacks to stop the automatic photo capture
+        photoCaptureHandler.removeCallbacks(photoCaptureRunnable)
+    }
+    private fun processImageWithPython(imagePath: String) {
+        try {
+            // Import the Python module
+            val imageProcessor = Python.getInstance().getModule("image_processor")
+
+            // Call the Python function to process the image
+            imageProcessor.callAttr("process_image", imagePath)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error processing image with Python: ${e.message}", e)
+        }
+    }
+
 }

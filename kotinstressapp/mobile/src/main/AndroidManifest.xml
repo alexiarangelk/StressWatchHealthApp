@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StressSmartWatch">
+        android:theme="@style/Theme.StressSmartWatch"
+        android:name="com.chaquo.python.android.PyApplication">
         <activity
             android:name=".CameraPage"
             android:exported="false"
