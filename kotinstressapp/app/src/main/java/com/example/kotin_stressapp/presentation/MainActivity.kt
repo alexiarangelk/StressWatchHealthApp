@@ -235,14 +235,6 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         Log.d("[]", "------------.------------<<=[{}]=>>------------.------------")
         Log.d("State Change", "App is now Stopping")
         onPause()
-        //------ send all the data we need onwards to the phone app
-
-        //connect to wifi
-//        connectivityManager.requestNetwork(
-//            NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build(),
-//            callback
-//        )
-//        startActivity(Intent("com.google.android.clockwork.settings.connectivity.wifi.ADD_NETWORK_SETTINGS"))
 
         try {
             val `object` = JSONObject()
@@ -264,23 +256,10 @@ class MainActivity : ComponentActivity() , SensorEventListener {
         hrMap.clear()
         hrvMap.clear()
 
-        //disconnect to wifi if not needed anymore
-//        connectivityManager.bindProcessToNetwork(null)
-//        connectivityManager.unregisterNetworkCallback(callback)
+
     }
 
-//    val callback = object : ConnectivityManager.NetworkCallback() {
-//        override fun onAvailable(network: Network) {
-//            super.onAvailable(network)
-//            // The Wi-Fi network has been acquired. Bind it to use this network by default.
-//            connectivityManager.bindProcessToNetwork(network)
-//        }
 //
-//        override fun onLost(network: Network) {
-//            super.onLost(network)
-//            // Called when a network disconnects or otherwise no longer satisfies this request or callback.
-//        }
-//    }
 
     fun sendDataToPhone(int : heartRateValue, float : hrvValueToSend) {
         // Mock node ID for emulation purposes
@@ -447,7 +426,7 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 Log.d("Heart Rate Sensor", "grab the heartratevalue $heartRateValue")
                 Log.d("Heart Rate Sensor", "hr map is $hrMap")
 
-                sendDataToPhone(heartRate, heartRateVariability)
+
 
                 //heart rate variability
                 val spareHRV = hrvValue
@@ -463,6 +442,8 @@ class MainActivity : ComponentActivity() , SensorEventListener {
                 }
                 Log.d("Heart Rate Variability", "grab the HRV $hrvValue")
                 Log.d("Heart Rate Variability Sensor", "hrv map is $hrvMap")
+
+                sendDataToPhone(heartRate, heartRateVariability)
             }
         }
     }
