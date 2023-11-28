@@ -39,6 +39,8 @@ import java.util.Locale
 import android.os.Handler
 import android.os.Looper
 import com.chaquo.python.Python
+import java.io.File
+import java.math.RoundingMode
 
 typealias LumaListener = (luma: Double) -> Unit
 
@@ -54,6 +56,9 @@ class CameraPage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val dexOutputDir: File = codeCacheDir
+        dexOutputDir.setReadOnly()
+
         viewBinding = ActivityCameraPageBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
@@ -113,6 +118,10 @@ class CameraPage : AppCompatActivity() {
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        val final = calculateProportion(1.0, 0.5, true)
+        Log.d("Stress Equation", "grab the HRV $final")
+        Log.d("yuh", "-----------------------------------------")
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
@@ -237,6 +246,35 @@ class CameraPage : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    //returns percentage
+    private fun calculateProportion(hr : Double, hrv : Double, ml : Boolean): Double{
+        var y1 = 0.0
+        var y2 = 0.0
+
+        //hr - calculate proportion
+        if (hr > 50){
+            y1 = (hr - 50)/135
+        }
+
+        //hrv - calculate proportion
+        if (hrv < 48){
+            y2 = hrv/48
+        }
+
+        //ml - convert binary to double
+        val y3 = if (ml) 1.0 else 0.0
+
+        //final equation
+        var final = ((y1 * (.4)) + (y2 * (.4)) + (y3 * (.2))) * 100
+
+        Log.d("yuh", "-----------------------------------------")
+        Log.d("Stress Equation", "HR proportion is $y1")
+        Log.d("Stress Equation", "HRV proportion is $y2")
+        Log.d("Stress Equation", "Machine Learning proportion is $y3")
+
+        return final.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
     }
 
 }
